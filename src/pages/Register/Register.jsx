@@ -1,13 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Register.css";
 
 const Register = () => {
+  const [csrfToken, setCsrfToken] = useState("");
+
   const [form, setForm] = useState({
     username: "",
     password: "",
     email: "",
     avatar: "",
   });
+
+  useEffect(() => {
+    fetch("https://chatify-api.up.railway.app/csrf", {
+      method: "PATCH",
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setCsrfToken(data.csrfToken);
+      });
+  }, []);
+
+  console.log("CSRF Token:", csrfToken);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
