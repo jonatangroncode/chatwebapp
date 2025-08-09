@@ -22,8 +22,37 @@ const Register = () => {
       });
   }, []);
 
-  console.log("CSRF Token:", csrfToken);
+  const handleRegister = async () => {
+    try {
+      const res = await fetch(
+        "https://chatify-api.up.railway.app/auth/register",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            username: form.username,
+            password: form.password,
+            email: form.email,
+            avatar: form.avatar,
+            csrfToken,
+          }),
+        }
+      );
 
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        alert(data?.message || "Registrerad!");
+      } else {
+        alert(data?.message || `Registrering misslyckades. (${res.status})`);
+        console.log(form);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Nätverksfel.");
+    }
+  };
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -35,6 +64,9 @@ const Register = () => {
       return false;
     }
   };
+
+  const isFormInvalid =
+    !form.username || !form.password || !form.email || !csrfToken;
 
   return (
     <>
@@ -103,8 +135,8 @@ const Register = () => {
           )}
 
           <button
-            onClick={() => alert("Registrerad!")}
-            disabled={Object.values(form).some((v) => !v)}
+            onClick={handleRegister}
+            disabled={isFormInvalid}
             className="register-button"
           >
             Registrera
