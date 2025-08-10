@@ -38,14 +38,22 @@ const Login = () => {
         }),
       });
 
-      const data = await res.json().catch(() => ({}));
-
-      if (res.ok) {
-        alert(data?.message || "inloggad!");
-      } else {
-        alert(data?.message || `inloggning misslyckades. (${res.status})`);
-        console.log(form);
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = { message: text };
       }
+
+      const token = data?.token || data?.accessToken || data?.jwt;
+      if (token) {
+        setJwtToken(token);
+        localStorage.setItem("access_token", token);
+        alert("Inloggad!");
+        return;
+      }
+      alert(data?.message || "Inloggning lyckades men ingen token mottogs.");
     } catch (err) {
       console.error(err);
       alert("Nätverksfel.");
