@@ -141,6 +141,9 @@ const Register = () => {
           >
             Registrera
           </button>
+          <div className="nav-link">
+            Har du redan konto? <a href="/">Logga in här</a>
+          </div>
         </div>
       </div>
     </>

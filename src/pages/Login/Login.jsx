@@ -1,0 +1,19 @@
+import "./Login.css";
+
+const Login = () => {
+  return (
+    <div className="login-container">
+      <div className="login-card">
+        <h2 className="login-title">Logga in</h2>
+        <input type="text" placeholder="Användarnamn" className="login-input" />
+        <input type="password" placeholder="Lösenord" className="login-input" />
+        <button className="login-button">Logga in</button>{" "}
+        <div className="nav-link">
+          Har du inget konto? <a href="/register">Registrera här</a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
