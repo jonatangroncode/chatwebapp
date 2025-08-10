@@ -1,6 +1,22 @@
 import "./Login.css";
+import React, { useState, useEffect } from "react";
 
 const Login = () => {
+  const [csrfToken, setCsrfToken] = useState("");
+
+  useEffect(() => {
+    fetch("https://chatify-api.up.railway.app/csrf", {
+      method: "PATCH",
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setCsrfToken(data.csrfToken);
+      });
+  }, []);
+
+  console.log("CSRF Token:", csrfToken);
+
   return (
     <div className="login-container">
       <div className="login-card">
