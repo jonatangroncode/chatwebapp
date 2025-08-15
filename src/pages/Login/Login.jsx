@@ -1,14 +1,20 @@
 import "./Login.css";
 import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Login = () => {
   const [csrfToken, setCsrfToken] = useState("");
   const [jwtToken, setJwtToken] = useState("");
+  const [message, setMessage] = useState({ text: "", type: "" });
 
   const [form, setForm] = useState({
     username: "",
     password: "",
   });
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/chat";
 
   useEffect(() => {
     fetch("https://chatify-api.up.railway.app/csrf", {
@@ -47,18 +53,29 @@ const Login = () => {
       }
 
       const token = data?.token || data?.accessToken || data?.jwt;
+
+      if (!token) {
+        setMessage({
+          text: "Inloggning misslyckades. Ingen token mottagen.",
+          type: "error",
+        });
+      }
       if (token) {
         setJwtToken(token);
-        localStorage.setItem("access_token", token);
-        alert("Inloggad!");
+
+        sessionStorage.setItem("jwt_token", token);
+        setMessage({ text: "Inloggad!", type: "success" });
+        navigate(from, { replace: true });
+
         return;
       }
-      alert(data?.message || "Inloggning lyckades men ingen token mottogs.");
     } catch (err) {
       console.error(err);
-      alert("Nätverksfel.");
+      setMessage({ text: "Nätverksfel.", type: "error" });
     }
   };
+
+  console.log(jwtToken);
 
   return (
     <div className="login-container">
@@ -80,6 +97,9 @@ const Login = () => {
           value={form.password}
           onChange={handleChange}
         />
+        {message.text && (
+          <p className={`login-message ${message.type}`}>{message.text}</p>
+        )}
         <button
           className="login-button"
           onClick={handleLogin}
