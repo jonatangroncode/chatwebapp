@@ -1,6 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, Navigate } from "react-router-dom";
+import SideNav from "../SideNav/SideNav";
 
 const ProtectedRoute = () => {
   const location = useLocation();
@@ -12,9 +13,10 @@ const ProtectedRoute = () => {
   }
 
   return (
-    <Grid container direction="column" width="100%" flexWrap="nowrap">
+    <Grid container direction="row" width="100%" flexWrap="nowrap">
+      <SideNav />
       <Grid container direction="row" flexWrap="nowrap">
-        <Grid item xs>
+        <Grid>
           <Outlet />
         </Grid>
       </Grid>

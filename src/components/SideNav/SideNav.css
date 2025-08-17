@@ -1,0 +1,140 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  min-height: 100vh;
+  background-color: #d2d2d2;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 85px;
+  background-color: #9586b6;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  padding: 25px 20px;
+  transition: width 0.3s ease;
+}
+
+.sidebar:hover {
+  width: 260px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.sidebar-header img {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.sidebar-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+  height: 80%;
+}
+
+.sidebar-links h4 span {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.sidebar:hover .sidebar-links h4 span {
+  opacity: 1;
+}
+
+.sidebar-links h4 {
+  font-weight: 500;
+  color: #f6f6f7;
+  white-space: nowrap;
+  position: relative;
+  margin: 4px 0 8px;
+}
+
+.sidebar-links li a {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: center;
+  color: #050726e3;
+  font-weight: 500;
+  column-gap: 20px;
+  padding: 12px 10px;
+  white-space: nowrap;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.sidebar:not(:hover) .sidebar-links li a {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  column-gap: 0;
+}
+
+.sidebar:not(:hover) .link-text {
+  display: none;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  font-size: 24px;
+  line-height: 1;
+  width: 24px;
+  text-align: center;
+}
+
+.sidebar-links li a:hover {
+  background-color: #dcd6e8;
+}
+
+.user-account {
+  margin-top: auto;
+  padding: 12px 10px;
+  margin-left: -10px;
+  border-top: 1px solid #eee;
+}
+
+.user-account .user-profile {
+  display: flex;
+  flex-direction: column;
+  color: #050726e3;
+  gap: 8px;
+}
+
+.user-profile img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.sidebar:not(:hover) .user-detail,
+.sidebar:not(:hover) .user-status {
+  display: none;
+}
+
+.user-profile h3 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.user-profile span {
+  font-size: 0.875rem;
+}
+
+.sidebar:hover .user-profile {
+  flex-direction: row;
+  align-items: center;
+}
