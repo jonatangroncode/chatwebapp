@@ -80,12 +80,12 @@ const Chat = () => {
             <div key={msg.id} className="chat-message">
               <p className="message-text">{msg.text}</p>
               <button
-                className="delete-btn"
+                className="material-symbols-outlined"
                 onClick={() => deleteMessage(msg.id)}
                 disabled={deletingId === msg.id}
                 aria-label="Ta bort meddelande"
               >
-                {deletingId === msg.id ? "Raderar…" : "Radera"}
+                delete
               </button>
             </div>
           ))}
