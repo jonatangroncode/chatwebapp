@@ -1,0 +1,14 @@
+.chat-page {
+  height: 100dvh;
+  max-height: 100dvh;
+  width: 100dvw;
+  max-width: 100dvw;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: #f7f7fb;
+  border: 1px solid #e6e6ef;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
