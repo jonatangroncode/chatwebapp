@@ -147,3 +147,13 @@
 .bubble-delete:hover {
   opacity: 1;
 }
+
+.msg.from-johnny {
+  align-self: flex-start;
+  background-color: #eee;
+}
+
+.msg.from-johnny .bubble {
+  background-color: #f0f0f0;
+  color: #333;
+}

@@ -70,6 +70,16 @@ const Chat = () => {
       const data = await res.json();
       setMessages((prev) => [...prev, data.latestMessage]);
       setValue("");
+
+      setTimeout(() => {
+        const reply = {
+          text: "Hörde dig! Vad menar du med det? 🤔",
+          avatar: "https://i.pravatar.cc/100?img=14",
+          username: "Johnny",
+          conversationId: null,
+        };
+        setMessages((prev) => [...prev, reply]);
+      }, 1000);
     } catch (err) {
       console.error(err);
     }
