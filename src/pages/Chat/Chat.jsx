@@ -12,20 +12,8 @@ const Chat = () => {
 
   const [fakeChat, setFakeChat] = useState([
     {
-      text: "Tja tja, hur mår du?",
-      avatar: "https://i.pravatar.cc/100?img=14",
-      username: "Johnny",
-      conversationId: null,
-    },
-    {
-      text: "Hallå!! Svara då!!",
-      avatar: "https://i.pravatar.cc/100?img=14",
-      username: "Johnny",
-      conversationId: null,
-    },
-    {
-      text: "Sover du eller?! 😴",
-      avatar: "https://i.pravatar.cc/100?img=14",
+      text: "Hej! Hur mår du?",
+      avatar: "https://i.pravatar.cc/100?img=1",
       username: "Johnny",
       conversationId: null,
     },
@@ -72,14 +60,28 @@ const Chat = () => {
       setValue("");
 
       setTimeout(() => {
+        const johnnyReplies = [
+          "Nejmen vad fint",
+          "det låter bra",
+          "jaha, okej",
+          "intressant",
+          "jaha, vad spännande",
+          "det är ju kul",
+          "jaha, det var ju intressant",
+          "vet du vad? Jag hpller med",
+          "det var aldeles för länge sedan vi träffades",
+        ];
+
+        const RandomReply =
+          johnnyReplies[Math.floor(Math.random() * johnnyReplies.length)];
         const reply = {
-          text: "Hörde dig! Vad menar du med det? 🤔",
+          text: RandomReply,
           avatar: "https://i.pravatar.cc/100?img=14",
           username: "Johnny",
           conversationId: null,
         };
-        setMessages((prev) => [...prev, reply]);
-      }, 1000);
+        setFakeChat((prev) => [...prev, reply]);
+      }, 1500);
     } catch (err) {
       console.error(err);
     }
@@ -107,22 +109,30 @@ const Chat = () => {
       <header className="chat-header">Chat</header>
       <div className="chat-container">
         <div className="chat-messages">
-          {messages.map((msg) => (
-            <div key={msg.id} className="msg is-mine">
-              <div className="bubble">
-                <p className="bubble-text">{msg.text}</p>
-                <div className="bubble-meta">
-                  <button
-                    className="bubble-delete"
-                    onClick={() => deleteMessage(msg.id)}
-                    aria-label="Ta bort meddelande"
-                  >
-                    ✕
-                  </button>
+          {[...messages, ...fakeChat].map((msg, index) => {
+            const isJohnny = msg.username === "Johnny";
+            return (
+              <div
+                key={msg.id || index}
+                className={`msg ${isJohnny ? "from-johnny" : "is-mine"}`}
+              >
+                <div className="bubble">
+                  <p className="bubble-text">{msg.text}</p>
+                  <div className="bubble-meta">
+                    {!isJohnny && (
+                      <button
+                        className="bubble-delete"
+                        onClick={() => deleteMessage(msg.id)}
+                        aria-label="Ta bort meddelande"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <form className="chat-input" onSubmit={sendMessage}>
