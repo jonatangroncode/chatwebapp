@@ -3,6 +3,9 @@ import "./Chat.css";
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
+  const [value, setValue] = useState("");
+
+  const token = sessionStorage.getItem("jwt_token");
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -11,7 +14,7 @@ const Chat = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${sessionStorage.getItem("jwt_token")}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -27,7 +30,33 @@ const Chat = () => {
     };
 
     fetchMessages();
-  }, []);
+  }, [token]);
+
+  const sendMessage = async (e) => {
+    e.preventDefault();
+    if (!value.trim()) return;
+
+    try {
+      const res = await fetch("https://chatify-api.up.railway.app/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ text: value }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Misslyckades att skicka meddelande");
+      }
+
+      const data = await res.json();
+      setMessages((prev) => [...prev, data.latestMessage]);
+      setValue("");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   console.log(messages);
   return (
@@ -41,8 +70,16 @@ const Chat = () => {
             </div>
           ))}
         </div>
-        <input type="text" />
-        <button type="submit">Send</button>
+        <form className="chat-input" onSubmit={sendMessage}>
+          {" "}
+          <input
+            type="text"
+            placeholder="Skriv ett meddelande"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
+          <button type="submit">Skicka</button>
+        </form>
       </div>
     </div>
   );
