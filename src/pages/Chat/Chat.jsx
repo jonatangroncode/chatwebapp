@@ -10,6 +10,27 @@ const Chat = () => {
 
   const token = sessionStorage.getItem("jwt_token");
 
+  const [fakeChat, setFakeChat] = useState([
+    {
+      text: "Tja tja, hur mår du?",
+      avatar: "https://i.pravatar.cc/100?img=14",
+      username: "Johnny",
+      conversationId: null,
+    },
+    {
+      text: "Hallå!! Svara då!!",
+      avatar: "https://i.pravatar.cc/100?img=14",
+      username: "Johnny",
+      conversationId: null,
+    },
+    {
+      text: "Sover du eller?! 😴",
+      avatar: "https://i.pravatar.cc/100?img=14",
+      username: "Johnny",
+      conversationId: null,
+    },
+  ]);
+
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -77,16 +98,19 @@ const Chat = () => {
       <div className="chat-container">
         <div className="chat-messages">
           {messages.map((msg) => (
-            <div key={msg.id} className="chat-message">
-              <p className="message-text">{msg.text}</p>
-              <button
-                className="material-symbols-outlined"
-                onClick={() => deleteMessage(msg.id)}
-                disabled={deletingId === msg.id}
-                aria-label="Ta bort meddelande"
-              >
-                delete
-              </button>
+            <div key={msg.id} className="msg is-mine">
+              <div className="bubble">
+                <p className="bubble-text">{msg.text}</p>
+                <div className="bubble-meta">
+                  <button
+                    className="bubble-delete"
+                    onClick={() => deleteMessage(msg.id)}
+                    aria-label="Ta bort meddelande"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
             </div>
           ))}
         </div>
