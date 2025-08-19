@@ -16,6 +16,7 @@ const Chat = () => {
       avatar: "https://i.pravatar.cc/100?img=1",
       username: "Johnny",
       conversationId: null,
+      createdAt: "2025-08-18T10:00:00.000Z",
     },
   ]);
 
@@ -56,7 +57,13 @@ const Chat = () => {
       if (!res.ok) throw new Error("Misslyckades att skicka meddelande");
 
       const data = await res.json();
-      setMessages((prev) => [...prev, data.latestMessage]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          ...data.latestMessage,
+          createdAt: new Date().toISOString(),
+        },
+      ]);
       setValue("");
 
       setTimeout(() => {
@@ -79,6 +86,7 @@ const Chat = () => {
           avatar: "https://i.pravatar.cc/100?img=14",
           username: "Johnny",
           conversationId: null,
+          createdAt: new Date(Date.now() + 2000).toISOString(),
         };
         setFakeChat((prev) => [...prev, reply]);
       }, 1500);
@@ -103,14 +111,25 @@ const Chat = () => {
       setDeletingId(null);
     }
   };
+  const preparedFakeChat = fakeChat.map((msg, i) => ({
+    ...msg,
+    createdAt:
+      msg.createdAt ||
+      new Date(Date.now() - (fakeChat.length - i) * 1000 * 60).toISOString(),
+  }));
+
+  const allMessages = [...messages, ...preparedFakeChat].sort(
+    (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+  );
 
   return (
     <div className="chat-page">
       <header className="chat-header">Chat</header>
       <div className="chat-container">
         <div className="chat-messages">
-          {[...messages, ...fakeChat].map((msg, index) => {
+          {allMessages.map((msg, index) => {
             const isJohnny = msg.username === "Johnny";
+
             return (
               <div
                 key={msg.id || index}

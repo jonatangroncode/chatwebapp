@@ -47,7 +47,13 @@ const SideNav = () => {
           </li>
 
           <li className="sidebar-item">
-            <a href="#" className="sidebar-link">
+            <a
+              href="#"
+              className="sidebar-link"
+              onClick={() => {
+                sessionStorage.removeItem("jwt_token");
+              }}
+            >
               <span className="material-symbols-outlined" aria-hidden="true">
                 logout
               </span>
