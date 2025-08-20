@@ -10,6 +10,8 @@ const Chat = () => {
 
   const token = sessionStorage.getItem("jwt_token");
 
+  console.log("meddelanden", messages);
+
   const [fakeChat, setFakeChat] = useState([
     {
       text: "Hej! Hur mår du?",
