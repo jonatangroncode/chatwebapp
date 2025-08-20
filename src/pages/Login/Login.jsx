@@ -2,6 +2,7 @@ import "./Login.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const [csrfToken, setCsrfToken] = useState("");
@@ -62,8 +63,25 @@ const Login = () => {
           text: "Inloggning misslyckades. Ingen token mottagen.",
           type: "error",
         });
+        return;
       }
       if (token) {
+        const payload = jwtDecode(token);
+        console.log("Decoded JWT Payload:", payload);
+
+        const authUser = {
+          id: payload.id ?? null,
+          user: payload.user ?? "",
+          email: payload.email ?? "",
+          avatar: payload.avatar || "https://i.pravatar.cc/300",
+          exp: payload.exp ?? null,
+          invite: payload.invite ?? null,
+          token,
+          iat: payload.iat ?? null,
+        };
+
+        sessionStorage.setItem("auth_user", JSON.stringify(authUser));
+
         setJwtToken(token);
 
         sessionStorage.setItem("jwt_token", token);

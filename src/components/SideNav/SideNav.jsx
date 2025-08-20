@@ -1,6 +1,13 @@
 import "./SideNav.css";
 
 const SideNav = () => {
+  const auth = JSON.parse(sessionStorage.getItem("auth_user"));
+
+  const avatarSrc =
+    auth?.avatar && auth.avatar.trim() !== ""
+      ? auth.avatar
+      : "https://i.pravatar.cc/200";
+
   return (
     <aside className="sidebar" aria-label="Sidomeny">
       <nav className="sidebar-header">
@@ -65,10 +72,10 @@ const SideNav = () => {
 
       <div className="user-account">
         <div className="user-profile">
-          <img src="https://i.pravatar.cc/300" alt="profile" />
+          <img src={avatarSrc} alt="profile picture" />
           <div className="user-detail">
-            <h3>Ben Smith</h3>
-            <span>ben.smith@example.com</span>
+            <h3>{auth?.user ?? "Okänd användare"}</h3>
+            <span>{auth?.email ?? "Okänd e-post"}</span>
           </div>
         </div>
       </div>
