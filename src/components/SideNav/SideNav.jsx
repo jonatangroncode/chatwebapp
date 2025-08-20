@@ -1,5 +1,6 @@
 import "./SideNav.css";
 import { useNavigate } from "react-router-dom";
+import { sanitizeText } from "../../utils/sanitize";
 
 const SideNav = () => {
   const auth = JSON.parse(sessionStorage.getItem("auth_user"));
@@ -81,8 +82,8 @@ const SideNav = () => {
         <div className="user-profile">
           <img src={avatarSrc} alt="profile picture" />
           <div className="user-detail">
-            <h3>{auth?.user ?? "Okänd användare"}</h3>
-            <span>{auth?.email ?? "Okänd e-post"}</span>
+            <h3>{sanitizeText(auth?.user ?? "Okänd användare")}</h3>
+            <span>{sanitizeText(auth?.email ?? "Okänd e-post")}</span>
           </div>
         </div>
       </div>

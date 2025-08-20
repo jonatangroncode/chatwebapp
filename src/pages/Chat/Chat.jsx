@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Chat.css";
+import { sanitizeText } from "../../utils/sanitize";
 
 const API = "https://chatify-api.up.railway.app";
 
@@ -10,7 +11,8 @@ const Chat = () => {
 
   const token = sessionStorage.getItem("jwt_token");
 
-  console.log("meddelanden", messages);
+  console.log("meddelanden:  ", messages);
+  console.log("deleteid:", deletingId);
 
   const [fakeChat, setFakeChat] = useState([
     {
@@ -31,9 +33,19 @@ const Chat = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+
+        if (res.status === 500) {
+          throw new Error("Serverfel: Kunde inte hämta meddelanden (500)");
+        }
+
         if (!res.ok) throw new Error("Misslyckades att hämta meddelanden");
+
         const data = await res.json();
-        setMessages(data);
+        const safeData = data.map((msg) => ({
+          ...msg,
+          text: sanitizeText(msg.text),
+        }));
+        setMessages(safeData);
       } catch (err) {
         console.error(err);
       }
@@ -44,7 +56,7 @@ const Chat = () => {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    const text = value.trim();
+    const text = sanitizeText(value);
     if (!text) return;
 
     try {
@@ -63,6 +75,7 @@ const Chat = () => {
         ...prev,
         {
           ...data.latestMessage,
+          text: sanitizeText(data.latestMessage?.text || ""),
           createdAt: new Date().toISOString(),
         },
       ]);
@@ -84,7 +97,7 @@ const Chat = () => {
         const RandomReply =
           johnnyReplies[Math.floor(Math.random() * johnnyReplies.length)];
         const reply = {
-          text: RandomReply,
+          text: sanitizeText(RandomReply),
           avatar: "https://i.pravatar.cc/100?img=14",
           username: "Johnny",
           conversationId: null,
@@ -123,7 +136,7 @@ const Chat = () => {
   const allMessages = [...messages, ...preparedFakeChat].sort(
     (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
   );
-
+  console.log("allMessages:", allMessages);
   return (
     <div className="chat-page">
       <header className="chat-header">Chat</header>
