@@ -7,12 +7,8 @@ const API = "https://chatify-api.up.railway.app";
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [value, setValue] = useState("");
-  const [deletingId, setDeletingId] = useState(null);
 
   const token = sessionStorage.getItem("jwt_token");
-
-  console.log("meddelanden:  ", messages);
-  console.log("deleteid:", deletingId);
 
   const [fakeChat, setFakeChat] = useState([
     {
@@ -112,7 +108,6 @@ const Chat = () => {
 
   const deleteMessage = async (id) => {
     if (!id) return;
-    setDeletingId(id);
     try {
       const res = await fetch(`${API}/messages/${id}`, {
         method: "DELETE",
@@ -123,7 +118,7 @@ const Chat = () => {
     } catch (err) {
       console.error(err);
     } finally {
-      setDeletingId(null);
+      setValue("");
     }
   };
   const preparedFakeChat = fakeChat.map((msg, i) => ({
@@ -136,7 +131,6 @@ const Chat = () => {
   const allMessages = [...messages, ...preparedFakeChat].sort(
     (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
   );
-  console.log("allMessages:", allMessages);
   return (
     <div className="chat-page">
       <header className="chat-header">Chat</header>

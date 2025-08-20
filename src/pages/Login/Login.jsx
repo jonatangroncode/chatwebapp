@@ -1,12 +1,10 @@
 import "./Login.css";
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const [csrfToken, setCsrfToken] = useState("");
-  const [jwtToken, setJwtToken] = useState("");
   const [message, setMessage] = useState({ text: "", type: "" });
 
   const [form, setForm] = useState({
@@ -56,7 +54,7 @@ const Login = () => {
         data = { message: text };
       }
 
-      const token = data?.token || data?.accessToken || data?.jwt;
+      const token = data?.token;
 
       if (!token) {
         setMessage({
@@ -67,7 +65,6 @@ const Login = () => {
       }
       if (token) {
         const payload = jwtDecode(token);
-        console.log("Decoded JWT Payload:", payload);
 
         const authUser = {
           id: payload.id ?? null,
@@ -82,8 +79,6 @@ const Login = () => {
 
         sessionStorage.setItem("auth_user", JSON.stringify(authUser));
 
-        setJwtToken(token);
-
         sessionStorage.setItem("jwt_token", token);
         setMessage({ text: "Inloggad!", type: "success" });
         navigate(from, { replace: true });
@@ -95,8 +90,6 @@ const Login = () => {
       setMessage({ text: "Nätverksfel.", type: "error" });
     }
   };
-
-  console.log(jwtToken);
 
   return (
     <div className="login-container">
