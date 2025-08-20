@@ -1,6 +1,7 @@
 import "./Login.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [csrfToken, setCsrfToken] = useState("");
@@ -11,6 +12,8 @@ const Login = () => {
     username: "",
     password: "",
   });
+
+  const isFormInvalid = !form.username || !form.password || !csrfToken;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -103,12 +106,12 @@ const Login = () => {
         <button
           className="login-button"
           onClick={handleLogin}
-          disabled={!csrfToken || !form.username || !form.password}
+          disabled={isFormInvalid}
         >
           Logga in
         </button>{" "}
         <div className="nav-link">
-          Har du inget konto? <a href="/register">Registrera här</a>
+          Har du inget konto? <Link to="/register">Registrera här</Link>
         </div>
       </div>
     </div>

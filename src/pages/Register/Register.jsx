@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Register.css";
 
 const Register = () => {
   const [csrfToken, setCsrfToken] = useState("");
+  const [message, setMessage] = useState({ text: "", type: "" });
 
   const [form, setForm] = useState({
     username: "",
@@ -10,6 +12,8 @@ const Register = () => {
     email: "",
     avatar: "",
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("https://chatify-api.up.railway.app/csrf", {
@@ -42,15 +46,30 @@ const Register = () => {
 
       const data = await res.json().catch(() => ({}));
 
-      if (res.ok) {
-        alert(data?.message || "Registrerad!");
-      } else {
-        alert(data?.message || `Registrering misslyckades. (${res.status})`);
-        console.log(form);
+      if (res.status === 201) {
+        setMessage({
+          text:
+            data?.message ||
+            `Användare registrerad framgångsrikt, Du skickas till inloggningen... (${res.status})`,
+          type: "success",
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } else if (res.status === 400) {
+        setMessage({
+          text:
+            data?.error ||
+            `Registrering misslyckades. Ogiltig begäran (${res.status})`,
+          type: "error",
+        });
       }
     } catch (err) {
       console.error(err);
-      alert("Nätverksfel.");
+      setMessage({
+        text: "Internt serverfel (500)",
+        type: "error",
+      });
     }
   };
   const handleChange = (e) => {
@@ -134,6 +153,10 @@ const Register = () => {
             </div>
           )}
 
+          {message.text && (
+            <p className={`message ${message.type}`}>{message.text}</p>
+          )}
+
           <button
             onClick={handleRegister}
             disabled={isFormInvalid}
@@ -142,7 +165,7 @@ const Register = () => {
             Registrera
           </button>
           <div className="nav-link">
-            Har du redan konto? <a href="/">Logga in här</a>
+            Har du redan konto? <Link to="/">Logga in här</Link>
           </div>
         </div>
       </div>

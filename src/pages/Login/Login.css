@@ -71,3 +71,7 @@
 .login-message.error {
   color: red;
 }
+
+.verificationmsg-message.success {
+  color: green;
+}
