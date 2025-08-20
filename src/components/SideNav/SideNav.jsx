@@ -1,7 +1,10 @@
 import "./SideNav.css";
+import { useNavigate } from "react-router-dom";
 
 const SideNav = () => {
   const auth = JSON.parse(sessionStorage.getItem("auth_user"));
+
+  const navigate = useNavigate();
 
   const avatarSrc =
     auth?.avatar && auth.avatar.trim() !== ""
@@ -59,6 +62,10 @@ const SideNav = () => {
               className="sidebar-link"
               onClick={() => {
                 sessionStorage.removeItem("jwt_token");
+                sessionStorage.removeItem("auth_user");
+                navigate("/", {
+                  replace: true,
+                });
               }}
             >
               <span className="material-symbols-outlined" aria-hidden="true">

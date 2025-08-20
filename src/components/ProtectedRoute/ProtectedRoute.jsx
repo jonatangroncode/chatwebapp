@@ -5,10 +5,20 @@ import SideNav from "../SideNav/SideNav";
 
 const ProtectedRoute = () => {
   const location = useLocation();
-  const token = sessionStorage.getItem("jwt_token");
-  const isAuthed = Boolean(token);
+
+  let auth = null;
+  try {
+    auth = JSON.parse(sessionStorage.getItem("auth_user"));
+  } catch {
+    console.error("Misslyckades med att parsa auth_user från sessionStorage");
+  }
+  const token = auth?.token || sessionStorage.getItem("jwt_token");
+  const notExpired = !auth?.exp || new Date(auth.exp * 1000) > new Date();
+  const isAuthed = Boolean(token) && notExpired;
 
   if (!isAuthed) {
+    sessionStorage.removeItem("jwt_token");
+    sessionStorage.removeItem("auth_user");
     return <Navigate to="/" replace state={{ from: location }} />;
   }
 
